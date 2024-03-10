@@ -2,7 +2,7 @@ class Card():
     def __init__(self, card_code):
         suits = {"H": "Hearts", "S": "Spades", "C": "Clubs", "D": "Diamonds"}
         Values = {"A": "Ace", "K": "King", "Q": "Gueen", "J": "Jack"}
-        Numeric_Values = {"Ace": "1 or 11", "King": 10, "Queen": 10, "Jack": 10}
+        Numeric_Values = {"Ace": 11, "King": 10, "Queen": 10, "Jack": 10}
 
 
         self.suit = suits[card_code[-1]]
