@@ -1,7 +1,7 @@
 class Card():
     def __init__(self, card_code):
         suits = {"H": "Hearts", "S": "Spades", "C": "Clubs", "D": "Diamonds"}
-        Values = {"A": "Ace", "K": "King", "Q": "Gueen", "J": "Jack"}
+        Values = {"A": "Ace", "K": "King", "Q": "Queen", "J": "Jack"}
         Numeric_Values = {"Ace": 11, "King": 10, "Queen": 10, "Jack": 10}
 
 
@@ -17,7 +17,7 @@ class Card():
         if self.value in Numeric_Values:
             self.numeric_value = Numeric_Values[self.value]
         else:
-            self.numeric_value = self.value
+            self.numeric_value = int(self.value)
 
     def __str__(self):
         return self.code
