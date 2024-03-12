@@ -1,16 +1,11 @@
-def test_function1():
-    print("test")
+def ask_hsdp():
+    choices = ['h', 's', 'd', 'p']
+    while True:
+        choice = input("What would you like to do? h(hit), s(stand), d(double), p(split)")
+        if choice in choices:
+            return choice
+        else:
+            print("Please pick a valid choice")
+        
 
-
-from Classes import Card
-
-card = Card("A_H")
-
-print(card.numeric_value)
-card.numeric_value = 1
-print(card.numeric_value)
-
-
-list = [1, 2, 3]
-list.append(1)
-print(list)
+ask_hsdp()

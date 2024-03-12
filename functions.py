@@ -62,6 +62,7 @@ def print_card_list(card_list):
     for card in card_list:
         print(card.code)
 
+
 def play_dealer(dealers_face_up_card):
     #randomly picking the dealers face down card
     dealers_face_down_card = generate_card()
@@ -114,9 +115,24 @@ def play_dealer(dealers_face_up_card):
             print("Dealer hits")
             print(f"Dealers cards are {[i.code for i in cards]}")
 
+def ask_hsdp():
+    choices = ['h', 's', 'd', 'p']
+    while True:
+        choice = input("What would you like to do? h(hit), s(stand), d(double), p(split)")
+        if choice in choices:
+            return choice
+        else:
+            print("Please pick a valid choice")
+
+
+def play_hand(cards):
+    pass
+
+
+def play_player(players_cards):
+    hands = [[players_cards]]
+
     
-
-
 
 
 #this is to get built to be the perfect strategy thing
