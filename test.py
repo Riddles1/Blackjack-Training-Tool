@@ -8,4 +8,7 @@ def ask_hsdp():
             print("Please pick a valid choice")
         
 
-ask_hsdp()
+# ask_hsdp()
+test = [['A', 'J']]
+test.append([test[0].pop()])
+print(test)

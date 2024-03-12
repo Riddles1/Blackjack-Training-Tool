@@ -124,15 +124,78 @@ def ask_hsdp():
         else:
             print("Please pick a valid choice")
 
+def ask_hsd():
+    choices = ['h', 's', 'd']
+    while True:
+        choice = input("What would you like to do? h(hit), s(stand), d(double)")
+        if choice in choices:
+            return choice
+        else:
+            print("Please pick a valid choice")
+
+
+
 
 def play_hand(cards):
     pass
 
 
 def play_player(players_cards):
-    hands = [[players_cards]]
+    hands = [players_cards]
 
-    
+    def choice_handler(hand, choice):
+        if choice == 'h':
+            print("hitting")
+            hand.append(generate_card())
+        if choice == 's':
+            print("standing")
+        if choice == 'd':
+            print("doubling")
+        if choice == 'p':
+            print("splitting")
+            hands.append([hand.pop()])
+################################################################################################# working on this atm (add in a blackjack functionality) (fix double ace problem of making 11's into 1's because 11 + 11 > 21)
+    for hand in hands:
+        while True:
+
+            if len(hand) == 1:
+                hand.append(generate_card())
+
+            total = card_sum_total(hand)
+            hand_values = [card.numeric_value for card in hand]
+            print(f"hand values are {hand_values}")
+
+            if 11 not in hand_values and total >21:
+                print(f"Player busts on a total of {total}")
+                return total
+            
+            elif 11 in hand_values and total >21:
+                #find first ace and make it's value a 1 instead of 11
+                for i in range(len(hand)):
+                    if hand[i].numeric_value == 11:
+                        hand[i].numeric_value = 1
+                        total -= 10
+                        break
+                for i in range(len(hand)):
+                    if hand[i] == 11:
+                        hand[i] == 1
+                        break         
+
+            if hand[0].value == hand[1].value:
+                print(f"Your Cards:\n{[card.value for card in hand]}")
+                choice = ask_hsdp()
+                choice_handler(hand, choice)
+                if choice == "s":
+                    print(f"Player stands on {total}")
+                    break
+            else:
+                print(f"Your Cards:\n{[card.value for card in hand]}")
+                choice = ask_hsd()
+                choice_handler(hand, choice)
+                if choice == "s":
+                    print(f"Player stands on {total}")
+                    break
+        
 
 
 #this is to get built to be the perfect strategy thing
@@ -140,6 +203,7 @@ def play_player(players_cards):
 def what_should_you_do(players_cards, dealers_card):
     pass
 
+forced_splitting_opportunity_card_list = [Card("J_C"), Card("J_H")]
 
 initial_cards = generate_initial_cards()
-output = play_dealer(initial_cards[-1])
+play_player(initial_cards)
