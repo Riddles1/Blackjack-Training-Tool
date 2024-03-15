@@ -41,8 +41,12 @@ def card_sum_total(card_list):
 #this function should also technically then play the dealer and see if they have a blackjack too
 #however in this use case (a perfect strategy training tool) it doesn't really matter since we only care about what the player should do and they can't do anything in this case
 def check_for_blackjack(cards):
-    card_values = [card.numeric_value for card in cards]
-    return 11 in card_values and 10 in card_values
+    if len(cards) == 2:
+        card_types = [card.value for card in cards]
+        numerics = [card.numeric_value for card in cards]
+
+        return ("Ace" in card_types and 10 in numerics)
+    return False
 
 
 #this function can only take a list that has 2 card objects in it
@@ -142,6 +146,7 @@ def play_hand(cards):
 
 def play_player(players_cards):
     hands = [players_cards]
+    finishing_hands = []
 
     def choice_handler(hand, choice):
         if choice == 'h':
@@ -150,27 +155,51 @@ def play_player(players_cards):
         if choice == 's':
             print("standing")
         if choice == 'd':
-            print("doubling")
+            hand.append(generate_card())
         if choice == 'p':
             print("splitting")
             hands.append([hand.pop()])
-################################################################################################# working on this atm (add in a blackjack functionality) (fix double ace problem of making 11's into 1's because 11 + 11 > 21)
+################################################################################################# working on this atm (check for 21 (atm the game asks player what they want to do on a total of 21)) (fix double ace problem of making 11's into 1's because 11 + 11 > 21)
     for hand in hands:
         while True:
-
-            if len(hand) == 1:
-                hand.append(generate_card())
-
             total = card_sum_total(hand)
             hand_values = [card.numeric_value for card in hand]
-            print(f"hand values are {hand_values}")
+            hand_value = [card.value for card in hand]
+
+            #if the hand only contains 1 card (player just split) add a new card to that hand
+            if len(hand) == 1:
+                if hand[0].value == "Ace":
+                    hand[0].numeric_value = 11
+                hand.append(generate_card())
+                total = card_sum_total(hand)
+            #checking for blackjack
+            if check_for_blackjack(hand):
+                print("Blackjack. PLayer wins")
+                finishing_hands.append(hand)
+                break
+            #checking for 21 with new card          
+            if total == 21:
+                print(f"Your Cards:\n{[card.value for card in hand]}")
+                print("Player wins with 21")
+                finishing_hands.append(hand)
+                break
+            #check for 21 with as new card
+            if hand[0].value == "Ace":
+                if (total - 10) == 21:
+                    print(f"Your Cards:\n{[card.value for card in hand]}")
+                    print("Player wins with 21")
+                    finishing_hands.append(hand)
+                    break       
+
+
 
             if 11 not in hand_values and total >21:
+                print(f"Your Cards:\n{[card.value for card in hand]}")
                 print(f"Player busts on a total of {total}")
-                return total
-            
+                finishing_hands.append(hand)
+                break
+            #find first ace and make it's value a 1 instead of 11
             elif 11 in hand_values and total >21:
-                #find first ace and make it's value a 1 instead of 11
                 for i in range(len(hand)):
                     if hand[i].numeric_value == 11:
                         hand[i].numeric_value = 1
@@ -181,29 +210,73 @@ def play_player(players_cards):
                         hand[i] == 1
                         break         
 
-            if hand[0].value == hand[1].value:
+            if hand[0].value == hand[1].value and len(hand) == 2:
                 print(f"Your Cards:\n{[card.value for card in hand]}")
                 choice = ask_hsdp()
                 choice_handler(hand, choice)
                 if choice == "s":
                     print(f"Player stands on {total}")
+                    finishing_hands.append(hand)
                     break
-            else:
+                if choice == "d":
+                    print("Player doubles")
+                    print(f"Your Cards:\n{[card.value for card in hand]}")
+                    total += hand[-1].numeric_value
+                    if total >21:
+                        print("player busts")
+                        finishing_hands.append(hand)
+                        break
+                    else: 
+                        print(f"player finishes on a total of {total}")
+                        finishing_hands.append(hand)
+                        break
+            elif (len(hand) != 2) or (len(hand) > 1 and hand[0].value != hand[1].value):
                 print(f"Your Cards:\n{[card.value for card in hand]}")
                 choice = ask_hsd()
                 choice_handler(hand, choice)
                 if choice == "s":
                     print(f"Player stands on {total}")
+                    finishing_hands.append(hand)
                     break
+                if choice == "d":
+                    print("Player doubles")
+                    print(f"Your Cards:\n{[card.value for card in hand]}")
+                    total += hand[-1].numeric_value
+                    finishing_hands.append(hand)
+                    break
+
+
+    finishing_hand_codes = []
+    for hand in finishing_hands:
+        finishing_hand_codes.append([card.code for card in hand])
+    print("Players hands:")
+    for hand in finishing_hand_codes:
+        print(hand)
+    return finishing_hands
         
 
 
 #this is to get built to be the perfect strategy thing
 #this should also account for what the player is allowed to do
 def what_should_you_do(players_cards, dealers_card):
-    pass
+    players_card_values = [card.value for card in players_cards]
+    players_numeric_values = [card.numveric_value for card in players_cards]
+    card_sum_total = card_sum_total(players_cards)
+    player_has_ace = "Ace" in players_card_values
 
-forced_splitting_opportunity_card_list = [Card("J_C"), Card("J_H")]
+    if player_has_ace:
+        #refer to has ace part of the table
+        #it should be ace + total
+        #so ace, 4, 2, 7 would just be ace + 13
+        pass
+    else:
+        #refer to doesn't have ace part of the table
+        pass
+    
+
+
+forced_splitting_opportunity_card_list = [Card("A_C"), Card("A_H")]
+forced_blackjack_card_list = [Card("A_S"), Card("J_H")]
 
 initial_cards = generate_initial_cards()
-play_player(initial_cards)
+play_player(forced_splitting_opportunity_card_list)
