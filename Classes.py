@@ -11,7 +11,7 @@ class Card():
         if card_code[0] in Values:
             self.value = Values[card_code[0]]
         else:
-            self.value = card_code[0:2].strip("_")
+            self.value = int(card_code[0:2].strip("_"))
         self.name = f"{self.value} of {self.suit}"
 
         if self.value in Numeric_Values:

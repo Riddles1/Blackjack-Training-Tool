@@ -1,13 +1,5 @@
-from functions import generate_initial_cards, generate_card, check_for_blackjack
+from functions import generate_initial_cards, play_player, play_dealer
 
-
-first_cards = generate_initial_cards
-
-DEALERS_FACEUP_CARD = first_cards[-1]
-Players_initial_cards = first_cards[0]
-
-blackjack = check_for_blackjack(Players_initial_cards)
-
-if blackjack:
-    txt = "player wins"
-    pass
+test_cards = generate_initial_cards()
+play_player(test_cards[0], test_cards[1])
+play_dealer(test_cards[1])
