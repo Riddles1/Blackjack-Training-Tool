@@ -4,7 +4,7 @@ from Classes import Card, Game_Over_Error
 
 
 
-cards_df = pd.read_csv(r"C:\Users\ridle\OneDrive\Desktop\personal_code_projects\Blackjack-Training-Tool\all cards.csv")
+cards_df = pd.read_csv(r".config\all cards.csv")
 cards_dict = cards_df.to_dict()
 CARDS_LIST =  list(cards_dict["Card"].values())
 
@@ -117,7 +117,7 @@ def ask_hsd():
             print("Please pick a valid choice")
 
 def what_should_you_do(players_cards, dealers_card):
-    df = pd.read_excel(r"C:\Users\ridle\OneDrive\Desktop\personal_code_projects\Blackjack-Training-Tool\DAS_Allowed_Strategy_Table.xlsx", index_col = [0])
+    df = pd.read_excel(r".config\DAS_Allowed_Strategy_Table.xlsx", index_col = [0])
     players_card_values = [card.value for card in players_cards]
     players_numeric_values = [card.numeric_value for card in players_cards]
     total = card_sum_total(players_cards)
